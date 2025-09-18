@@ -1,29 +1,28 @@
 class Solution {
   public:
-    vector<int> nextLargerElement(vector<int> &arr) {
-        // code here
-         int n = arr.size();
-    vector<int> res(n, -1);     // Initialize result array with -1
-    stack<int> st;              // Stack to store indices
+    vector<int> nextGreater(vector<int> &arr) {
+        int n = arr.size();
+        vector<int> ans(n, -1);
+        stack<int> st;  // stores indices
 
-    // Traverse the array twice (simulate circular array)
-    for (int i = 2 * n - 1; i >= 0; --i) {
-        int idx = i % n;
+        // Traverse the array twice (simulate circular nature)
+        for (int i = 2 * n - 1; i >= 0; i--) {
+            int idx = i % n;
 
-        // Maintain decreasing stack
-        while (!st.empty() && arr[st.top()] <= arr[idx]) {
-            st.pop();
+            // Pop all elements smaller or equal to current
+            while (!st.empty() && arr[st.top()] <= arr[idx]) {
+                st.pop();
+            }
+
+            // If stack is not empty and we are in the first pass
+            if (!st.empty() && i < n) {
+                ans[idx] = arr[st.top()];
+            }
+
+            // Push current index
+            st.push(idx);
         }
 
-        // If stack is not empty, next greater element is on top
-        if (!st.empty()) {
-            res[idx] = arr[st.top()];
-        }
-
-        // Push current index
-        st.push(idx);
-    }
-
-    return res;
+        return ans;
     }
 };
